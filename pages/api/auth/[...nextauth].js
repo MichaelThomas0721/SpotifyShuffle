@@ -6,12 +6,13 @@ export default NextAuth({
     SpotifyProvider({
       authorization:
         'https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private',
-      clientId: process.env.SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
     }),
   ],
+
   callbacks: {
-    async jwt({token, account}) {
+    async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.refresh_token;
       }
