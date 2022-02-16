@@ -1,0 +1,15 @@
+#container {
+    background: black;
+    border-radius: 15px;
+    display: flex;
+    padding: 15px;
+    margin: 10px;
+}
+
+#title {
+    color: var(--green);
+}
+
+#artist {
+    color: var(--green)
+}

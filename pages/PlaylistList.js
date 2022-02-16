@@ -1,23 +1,39 @@
-import React, { useEffect, useState } from "react"
-import axios from "axios";
-import useAuth from "../utils/useAuth";
+import React, { useEffect, useState } from "react";
+import styles from "../styles/playlistlist.module.css";
+import Playlist from "../Components/Playlist";
 
-export default function PlaylistList({ code }){
-    const accessToken = useAuth(code);
+export default function PlaylistList() {
+  const [list, setList] = useState([]);
 
-    
-    useEffect(() => {
-        axios.get("https://api.spotify.com/v1/me/playlists").then(res => {
-            console.log(res);
-        })
-        .catch(() => {
-            //window.location = "/";
-        })
-    }, [code])
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/playlists");
+        const { items } = await res.json();
+        setList(
+          items.map((item) => {
+            return (
+              <Playlist
+                title={item.name}
+                image={item.images[0]?.url}
+                spotId={item.id}
+                key={item.id}
+              />
+            );
+          })
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
-    return (
-        <div>
-            <h1>Playlist List</h1>
-        </div>
-    )
+    fetchData();
+  }, []);
+
+  return (
+    <div id={styles.container}>
+      <h1>Playlist List</h1>
+      {list}
+    </div>
+  );
 }

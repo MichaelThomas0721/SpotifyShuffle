@@ -1,0 +1,6 @@
+#container {
+    background: var(--black);
+    padding: 10px;
+    text-align: center;
+    color: var(--green);
+}
