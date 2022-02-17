@@ -19,17 +19,23 @@ export default function PlaylistList() {
   const spotId = router.query.spotId;
 
   function generatePlaylist(){
-    let total = totalSongs.current * 100
+    console.log("e");
+    let total = songTime.current;
     let songList = [];
-    let sorted = Objects.key(percentages.current).sort((a,b) => {
-      return map[b] - map[a];
-    });
+    let sorted =new Map([...percentages.current.entries()].sort((a, b) => b[1] - a[1]));
+    console.log(percentages.current);
+    console.log(sorted);
+    console.log("total: " + total);
+    console.log(Array.from(sorted.keys()));
+    /*
     for (let i = 0; total > 0; i++){
       if ( [...sorted][i][1] >= Math.floor(Math.random() * 100)){
         songList.push([...sorted][i][0]);
-        total -= 100;
+        total -= durations.current([...sorted][i][0])[1];
       }
-    } //TIME AHHHHHHH 
+    }
+    console.log(songList);
+    */
   }
 
   function updatePercentages(id, newPercent) {
@@ -39,6 +45,7 @@ export default function PlaylistList() {
   function getSongTimes(id, moreTime) {
     totalSongs.current = totalSongs.current + 1;
     songTime.current = songTime.current + moreTime;
+    durations.current.set(id, moreTime);
   }
 
   function timeChange(id, value) {
@@ -116,6 +123,7 @@ export default function PlaylistList() {
         id="time_minutes"
         onChange={(evt) => timeChange(2, evt.target.value)}
       />
+      <button onClick={() => generatePlaylist()}>Generate Playlist</button>
       {list}
     </div>
   );

@@ -8,10 +8,8 @@ export default function Song(props) {
   const getSongTimes = props.getSongTimes;
   const duration = props.duration;
 
-  function changePercentages(values) {
-    console.log(defaultValue);
-    console.log(props);
-    props.setPercentages(id, values);
+  function changePercentages(value) {
+    props.setPercentages(id, value);
   };
 
   useEffect(() => {
