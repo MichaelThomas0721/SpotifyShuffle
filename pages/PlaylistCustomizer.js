@@ -17,13 +17,11 @@ export default function PlaylistList() {
   const router = useRouter();
   //const spotId = sessionStorage.getItem("playlistId");
 
-  function generatePlaylist(){
+  async function generatePlaylist(){
     let total = desiredTime.current;
-    console.log(total / 60000);
     let songList = [];
-    let sorted =new Map([...percentages.current.entries()].sort((a, b) => b[1] - a[1]));
+    let sorted = new Map([...percentages.current.entries()].sort((a, b) => b[1] - a[1]));
     let keyArr = (Array.from(sorted.keys()));
-    console.log(keyArr);
     for (let i = 0; total > 0 && i <= keyArr.length; i++){
       if ( sorted.get(keyArr[i]) >= (Math.random() * 100)){
         songList.push(keyArr[i]);
@@ -39,7 +37,58 @@ export default function PlaylistList() {
 
     console.log("Song List: ");
     console.log(songList);
+    let userId = await fetchUserId();
+    console.log(userId.id);
+    let playlistDetails = await createEmptyPlaylist(userId.id);
+    console.log(playlistDetails.id);
+    addSongs(playlistDetails.id, songList);
+  }
 
+  async function fetchUserId() {
+    try {
+      const res = await fetch("/api/user");
+      const item = await res.json();
+      console.log(item);
+      return item;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function createEmptyPlaylist(userId) {
+    try {
+      const res = await fetch("/api/createPlaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: userId }),
+      });
+      const item = await res.json();
+      return item;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function addSongs(playlistId, songlist){
+    let uriInfo = [];
+    for (let song in songlist){
+      uriInfo.push("spotify:track:" + songlist[song]);
+    }
+    try {
+      const res = await fetch("/api/fillPlaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ playlistId: playlistId, data: uriInfo }),
+      });
+      const item = await res.json();
+      return item;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function updatePercentages(id, newPercent) {
@@ -67,14 +116,12 @@ export default function PlaylistList() {
     setDefaultValue(
       ((desiredTime / (songTime.current / totalSongs.current)) * 100) / totalSongs.current
     );
-    console.log(defaultValue);
   }
 
   useEffect(() => {
-    console.log(sessionStorage.getItem("playlistId"));
-    fetchData();
+    fetchSongs();
   }, []);
-  async function fetchData() {
+  async function fetchSongs() {
     try {
       const res = await fetch("/api/songs", {
         method: "POST",

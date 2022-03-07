@@ -1,11 +1,11 @@
-import { getPlaylistSongs } from '../../lib/spotify';
+import { createPlaylist } from '../../lib/spotify';
 import { getSession } from 'next-auth/react';
 
 const handler = async (req, res) => {
   const {
     token: { accessToken },
   } = await getSession({ req });
-  const response = await getPlaylistSongs(accessToken, req.body.playlistId);
+  const response = await createPlaylist(accessToken, req.body.userId);
   const items = await response.json();
   return res.status(200).json(items);
 };
