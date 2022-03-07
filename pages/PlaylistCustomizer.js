@@ -2,7 +2,6 @@ import styles from "../styles/playlistcustomizer.module.css";
 import React, { createContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Song from "../Components/Song";
-import { addBasePath } from "next/dist/shared/lib/router/router";
 
 export default function PlaylistList() {
   const [list, setList] = useState([]);
@@ -16,26 +15,31 @@ export default function PlaylistList() {
   const durations = useRef(new Map());
   const [defaultValue, setDefaultValue] = useState(0);
   const router = useRouter();
-  const spotId = router.query.spotId;
+  //const spotId = sessionStorage.getItem("playlistId");
 
   function generatePlaylist(){
-    console.log("e");
-    let total = songTime.current;
+    let total = desiredTime.current;
+    console.log(total / 60000);
     let songList = [];
     let sorted =new Map([...percentages.current.entries()].sort((a, b) => b[1] - a[1]));
-    console.log(percentages.current);
-    console.log(sorted);
-    console.log("total: " + total);
-    console.log(Array.from(sorted.keys()));
-    /*
-    for (let i = 0; total > 0; i++){
-      if ( [...sorted][i][1] >= Math.floor(Math.random() * 100)){
-        songList.push([...sorted][i][0]);
-        total -= durations.current([...sorted][i][0])[1];
+    let keyArr = (Array.from(sorted.keys()));
+    console.log(keyArr);
+    for (let i = 0; total > 0 && i <= keyArr.length; i++){
+      if ( sorted.get(keyArr[i]) >= (Math.random() * 100)){
+        songList.push(keyArr[i]);
+        total -= durations.current.get(keyArr[i]);
       }
     }
+
+    while(total > 0){
+      let rand = keyArr[Math.floor(Math.random() * keyArr.length)]
+      songList.push(rand)
+      total -= durations.current.get(rand);
+    }
+
+    console.log("Song List: ");
     console.log(songList);
-    */
+
   }
 
   function updatePercentages(id, newPercent) {
@@ -67,6 +71,7 @@ export default function PlaylistList() {
   }
 
   useEffect(() => {
+    console.log(sessionStorage.getItem("playlistId"));
     fetchData();
   }, []);
   async function fetchData() {
@@ -76,7 +81,7 @@ export default function PlaylistList() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ playlistId: spotId }),
+        body: JSON.stringify({ playlistId: sessionStorage.getItem("playlistId") }),
       });
       const { items } = await res.json();
       setList(

@@ -6,6 +6,7 @@ export default function playlist(props) {
   const router = useRouter();
 
   function redirect(){
+      sessionStorage.setItem('playlistId', props.spotId);
       router.push({pathname: '/PlaylistCustomizer', query: {spotId: props.spotId}});
   }
 
