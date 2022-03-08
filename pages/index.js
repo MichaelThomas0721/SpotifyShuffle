@@ -3,7 +3,9 @@ import { useSession, signIn, signOut } from "next-auth/react";
 export default function Home() {
   const { data: session } = useSession();
 
+  //Function to get the elements if or if not signed in
   function getSigned() {
+    //if signed in it will return the following
     if (session) {
       return (
         <div className="h-fit absolute top-1/3 -translate-y-1/2 w-fit left-1/2 -translate-x-1/2 text-center p-3">
@@ -26,6 +28,7 @@ export default function Home() {
         </div>
       );
     }
+    //if not signed in it will return the following
     return (
       <div className="h-fit absolute top-1/3 -translate-y-1/2 w-fit left-1/2 -translate-x-1/2 text-center p-3">
         <p className="text-green-500 text-xl">
@@ -41,10 +44,11 @@ export default function Home() {
     );
   }
 
+  //This is what the page displays, the function above is included and what is returned is displayed here
   return (
     <div>
       <h1 className="text-white text-center text-5xl">Bashify</h1>
       {getSigned()}
     </div>
-  )
+  );
 }
