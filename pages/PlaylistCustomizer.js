@@ -160,9 +160,9 @@ export default function PlaylistList() {
   }
 
   return (
-    <div id={styles.container}>
-      <h1>Songs</h1>
-      <label>Hours</label>
+    <div className="bg-black">
+      <h1 className="text-white text-center text-5xl">Songs</h1>
+      <label className="text-white">Hours</label>
       <input
         type="number"
         min="-1"
@@ -172,7 +172,7 @@ export default function PlaylistList() {
         id="time_hours"
         onChange={(evt) => timeChange(1, evt.target.value)}
       />
-      <label>Minutes</label>
+      <label className="text-white">Minutes</label>
       <input
         type="number"
         min="-1"
@@ -182,11 +182,10 @@ export default function PlaylistList() {
         id="time_minutes"
         onChange={(evt) => timeChange(2, evt.target.value)}
       />
-      <button onClick={() => generatePlaylist()}>Generate Playlist</button>
+      <button className="text-white bg-green-500 rounded p-2 ml-4" onClick={() => generatePlaylist()}>Generate Playlist</button>
       <div className="flex flex-wrap flex-row">
               {list}
       </div>
-
     </div>
   );
 }
