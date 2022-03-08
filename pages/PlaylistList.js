@@ -31,8 +31,8 @@ export default function PlaylistList() {
   }, []);
 
   return (
-    <div id={styles.container}>
-      <h1>Playlist List</h1>
+    <div w-fit m-auto>
+      <h1 className="text-green-500 text-center text-5xl">Playlists</h1>
       {list}
     </div>
   );

@@ -18,9 +18,9 @@ export default function Song(props) {
   });
 
   return (
-    <div id={styles.container}>
-      <h1 id={styles.title}>{title}</h1>
-      <h1 id={styles.artist}>{artist}</h1>
+    <div className="bg-black rounded-2xl flex p-4 m-3">
+      <h1 className="text-green-500">{title}</h1>
+      <h1 className="text-green-500">{artist}</h1>
       <input
         onChange={(evt) => changePercentages(evt.target.value)}
         type="number"

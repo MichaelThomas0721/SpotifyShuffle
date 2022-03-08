@@ -2,11 +2,6 @@
     aspect-ratio: 1/1;
 }
 
-#title {
-    color: var(--green);
-    padding-left: 20px;
-}
-
 #casing {
     align-self: auto;
     background: black;
