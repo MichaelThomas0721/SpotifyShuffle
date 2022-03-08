@@ -17,30 +17,33 @@ export default function PlaylistList() {
   const router = useRouter();
   //const spotId = sessionStorage.getItem("playlistId");
 
-  async function generatePlaylist(){
+  async function generatePlaylist() {
     let total = desiredTime.current;
     let songList = [];
-    let sorted = new Map([...percentages.current.entries()].sort((a, b) => b[1] - a[1]));
-    let keyArr = (Array.from(sorted.keys()));
-    for (let i = 0; total > 0 && i <= keyArr.length; i++){
-      if ( sorted.get(keyArr[i]) >= (Math.random() * 100)){
+    let sorted = new Map(
+      [...percentages.current.entries()].sort((a, b) => b[1] - a[1])
+    );
+    let keyArr = Array.from(sorted.keys());
+    for (let i = 0; total > 0 && i <= keyArr.length; i++) {
+      if (sorted.get(keyArr[i]) >= Math.random() * 100) {
         songList.push(keyArr[i]);
         total -= durations.current.get(keyArr[i]);
       }
     }
 
-    while(total > 0){
-      let rand = keyArr[Math.floor(Math.random() * keyArr.length)]
-      songList.push(rand)
+    while (total > 0 && songList.length > 0) {
+      let rand = keyArr[Math.floor(Math.random() * keyArr.length)];
+      songList.push(rand);
       total -= durations.current.get(rand);
     }
 
-    console.log("Song List: ");
-    console.log(songList);
+    songList = songList
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+
     let userId = await fetchUserId();
-    console.log(userId.id);
     let playlistDetails = await createEmptyPlaylist(userId.id);
-    console.log(playlistDetails.id);
     addSongs(playlistDetails.id, songList);
   }
 
@@ -71,9 +74,9 @@ export default function PlaylistList() {
     }
   }
 
-  async function addSongs(playlistId, songlist){
+  async function addSongs(playlistId, songlist) {
     let uriInfo = [];
-    for (let song in songlist){
+    for (let song in songlist) {
       uriInfo.push("spotify:track:" + songlist[song]);
     }
     try {
@@ -105,16 +108,18 @@ export default function PlaylistList() {
     if (id == 1) {
       hours.current = value;
     } else {
-      minutes.current = value;      
+      minutes.current = value;
     }
-    
-    desiredTime.current = (hours.current * 60 + parseInt(minutes.current)) * 60000;
+
+    desiredTime.current =
+      (hours.current * 60 + parseInt(minutes.current)) * 60000;
     updateDefaultPercent(desiredTime.current);
   }
 
   function updateDefaultPercent(desiredTime) {
     setDefaultValue(
-      ((desiredTime / (songTime.current / totalSongs.current)) * 100) / totalSongs.current
+      ((desiredTime / (songTime.current / totalSongs.current)) * 100) /
+        totalSongs.current
     );
   }
 
@@ -128,7 +133,9 @@ export default function PlaylistList() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ playlistId: sessionStorage.getItem("playlistId") }),
+        body: JSON.stringify({
+          playlistId: sessionStorage.getItem("playlistId"),
+        }),
       });
       const { items } = await res.json();
       setList(

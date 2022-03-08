@@ -31,9 +31,9 @@ export default function PlaylistList() {
   }, []);
 
   return (
-    <div w-fit m-auto>
-      <h1 className="text-green-500 text-center text-5xl">Playlists</h1>
-      {list}
+    <div className="p-6">
+      <h1 className="text-white font-bold pb-5 text-center text-5xl">Playlists</h1>
+      <div className="flex-wrap items-start flex justify-center">{list}</div>
     </div>
   );
 }

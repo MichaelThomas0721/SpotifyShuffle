@@ -3,6 +3,10 @@ module.exports = {
   theme: {
     extend: {
 
+      fontSize: {
+        dynamic: "clamp(1rem, 10vw, 2rem)",
+      },
+
       spacing: {
         'kbrw' : '38px',
         'kbrh' : '48px',
