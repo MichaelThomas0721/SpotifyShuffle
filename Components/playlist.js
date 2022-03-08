@@ -10,9 +10,9 @@ export default function playlist(props) {
   }
 
   return (
-    <a onClick={redirect} className="bg-black text-green-400 self-auto rounded flex flex-wrap flex-row w-1/3 mr-auto ml-auto p-4 m-4 h-fit">
+    <a onClick={redirect} className="bg-black text-green-400 self-auto rounded flex flex-wrap flex-row w-1/3 min-w-fit mr-auto ml-auto p-4 m-4 h-fit cursor-pointer hover:bg-slate-900">
       <img src={image} width="100" className="aspect-square"/>
-      <h1 className="w-fit text-green-500 text-3xl">{title}</h1>
+      <h1 className="w-fit m-auto text-green-500 text-3xl select-none">{title}</h1>
     </a>
   );
 }
