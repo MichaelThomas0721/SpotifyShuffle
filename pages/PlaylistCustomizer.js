@@ -183,7 +183,10 @@ export default function PlaylistList() {
         onChange={(evt) => timeChange(2, evt.target.value)}
       />
       <button onClick={() => generatePlaylist()}>Generate Playlist</button>
-      {list}
+      <div className="flex flex-wrap flex-row">
+              {list}
+      </div>
+
     </div>
   );
 }

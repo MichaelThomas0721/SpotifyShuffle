@@ -18,10 +18,10 @@ export default function Song(props) {
   });
 
   return (
-    <div className="bg-black rounded-2xl flex p-4 m-3">
+    <div className="bg-darkGrey rounded-2xl p-4 m-3 w-52 aspect-square overflow-hidden text-ellipsis text-center">
       <h1 className="text-green-500">{title}</h1>
       <h1 className="text-green-500">{artist}</h1>
-      <input
+      <input className="right-0"
         onChange={(evt) => changePercentages(evt.target.value)}
         type="number"
         placeholder={defaultValue}
