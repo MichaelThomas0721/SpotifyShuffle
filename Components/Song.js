@@ -21,7 +21,7 @@ export default function Song(props) {
 
   //this is what the page displays
   return (
-    <div className="bg-darkGrey rounded-2xl p-4 m-3 w-52 aspect-square overflow-hidden text-ellipsis text-center">
+    <div className="bg-darkGrey rounded-2xl p-4 m-3 w-52 aspect-auto overflow-hidden text-ellipsis text-center">
       <h1 className="text-green-500">{title}</h1>
       <h1 className="text-green-500">{artist}</h1>
       <input

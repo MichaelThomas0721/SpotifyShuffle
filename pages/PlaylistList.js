@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styles from "../styles/playlistlist.module.css";
 import Playlist from "../Components/Playlist";
 
 export default function PlaylistList() {

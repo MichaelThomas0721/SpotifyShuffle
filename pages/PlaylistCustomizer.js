@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import Song from "../Components/Song";
+import { useRouter } from "next/router";
+
 
 export default function PlaylistList() {
   //variables stored in state or ref
@@ -12,6 +14,7 @@ export default function PlaylistList() {
   const percentages = useRef(new Map());
   const durations = useRef(new Map());
   const [defaultValue, setDefaultValue] = useState(0);
+  const router = useRouter();
 
   //async function to generate a playlist on the button click
   async function generatePlaylist() {
@@ -29,13 +32,21 @@ export default function PlaylistList() {
       if (sorted.get(keyArr[i]) >= Math.random() * 100) {
         songList.push(keyArr[i]);
         total -= durations.current.get(keyArr[i]);
+      } 
+      if (parseInt(sorted.get(keyArr[i])) > 0){
+          keyArr = keyArr.filter(f => f !== keyArr[i]);
+          i--;
+      } else {
+        break;
       }
     }
 
     //this will run if the songs with set percentages don't fill the desired time
-    while (total > 0 && songList.length > 0) {
-      let rand = keyArr[Math.floor(Math.random() * keyArr.length)];
+    while (total > 0 && keyArr.length > 0) {
+      let random = Math.floor(Math.random() * keyArr.length);
+      let rand = keyArr[random];
       songList.push(rand);
+      keyArr = keyArr.filter(f => f !== rand);
       total -= durations.current.get(rand);
     }
 
@@ -48,7 +59,8 @@ export default function PlaylistList() {
     //gets user id and creates an empty playlist to populate
     let userId = await fetchUserId();
     let playlistDetails = await createEmptyPlaylist(userId.id);
-    addSongs(playlistDetails.id, songList);
+    let resp = await addSongs(playlistDetails.id, songList)
+    router.push({ pathname: "https://open.spotify.com/playlist/" + playlistDetails.id });
   }
 
   //function for fetching user id from spotify api
@@ -181,34 +193,45 @@ export default function PlaylistList() {
   //This is what the page displays
   return (
     <div className="bg-black">
-      <h1 className="text-white text-center text-5xl">Songs</h1>
-      <label className="text-white">Hours</label>
-      <input
-        type="number"
-        min="-1"
-        max="1000"
-        step="1"
-        name="hours"
-        id="time_hours"
-        onChange={(evt) => timeChange(1, evt.target.value)}
-      />
-      <label className="text-white">Minutes</label>
-      <input
-        type="number"
-        min="-1"
-        max="60"
-        step="1"
-        name="minutes"
-        id="time_minutes"
-        onChange={(evt) => timeChange(2, evt.target.value)}
-      />
-      <button
-        className="text-white bg-green-500 rounded p-2 ml-4"
-        onClick={() => generatePlaylist()}
-      >
-        Generate Playlist
-      </button>
-      <div className="flex flex-wrap flex-row">{list}</div>
+      <h1 className="text-white text-center text-5xl mt-3">
+        Customize Playlist
+      </h1>
+      <div className="mt-9 w-fit m-auto">
+        <label htmlFor="time_hours" className="text-white mx-3">
+          Hours
+        </label>
+        <input
+          type="number"
+          min="-1"
+          max="1000"
+          step="1"
+          name="hours"
+          id="time_hours"
+          onChange={(evt) => timeChange(1, evt.target.value)}
+        />
+        <label htmlFor="time_minutes" className="text-white mx-3">
+          Minutes
+        </label>
+        <input
+          type="number"
+          min="-1"
+          max="60"
+          step="1"
+          name="minutes"
+          id="time_minutes"
+          onChange={(evt) => timeChange(2, evt.target.value)}
+        />
+      </div>
+      <div className="w-fit m-auto">
+        <button
+          className="text-white bg-green-500 rounded p-2 my-7 m-auto hover:bg-green-700"
+          onClick={() => generatePlaylist()}
+        >
+          Generate Playlist
+        </button>
+      </div>
+
+      <div className="flex flex-wrap flex-row justify-center">{list}</div>
     </div>
   );
 }
