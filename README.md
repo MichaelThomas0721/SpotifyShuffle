@@ -32,3 +32,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+To use this application you will need to create a new application in the spotify developer portal and add your url as a callback uri.
+You will need to create a .env.local file inside the root folder of the application containing your client id and secret from spotify as well as a nextauth url and secret.
+You will finally be required to install all node modules. (npm install or yarn install)
+
+For bugs contact me at michaelthomas0721@icloud.com
